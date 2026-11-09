@@ -30,3 +30,15 @@ document.querySelectorAll('img').forEach(img=>{
     if(frame){frame.classList.add('image-unavailable');img.remove()}
   },{once:true});
 });
+
+function applyElaneContent(){
+  if(!window.ElaneStore)return;
+  const settings=window.ElaneStore.getSettings();
+  document.querySelectorAll('.announcement').forEach(el=>el.textContent=settings.announcement);
+  document.querySelectorAll('[data-site-setting]').forEach(el=>{
+    const key=el.getAttribute('data-site-setting');
+    if(Object.prototype.hasOwnProperty.call(settings,key))el.textContent=settings[key];
+  });
+}
+applyElaneContent();
+window.addEventListener('elane:datachange',applyElaneContent);
