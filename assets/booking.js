@@ -1,0 +1,77 @@
+
+const serviceMenu = [
+{id:'nail-mani',category:'Nails',name:'Classic manicure',price:10,duration:40,description:'Shape, tidy, cuticle care and a polished finish.'},
+{id:'nail-gel',category:'Nails',name:'Gel manicure',price:20,duration:60,description:'A neat gel finish with extra wear time.'},
+{id:'nail-pedi',category:'Nails',name:'Classic pedicure',price:15,duration:50,description:'Foot soak, nail care and a fresh finish.'},
+{id:'nail-gel-pedi',category:'Nails',name:'Gel pedicure',price:25,duration:70,description:'A complete pedicure with gel colour.'},
+{id:'nail-acrylic',category:'Nails',name:'Acrylic full set',price:30,duration:90,description:'Extensions, shaping and your chosen finish.'},
+{id:'nail-art',category:'Nails',name:'Nail art add-on',price:10,duration:25,description:'A little detail or expressive custom art.'},
+{id:'hair-cut',category:'Hair',name:'Wash & haircut',price:20,duration:60,description:'Consultation, wash, cut and finish.'},
+{id:'hair-blow',category:'Hair',name:'Wash & blow-dry',price:15,duration:45,description:'A smooth, polished blow-dry finish.'},
+{id:'hair-braids',category:'Hair',name:'Braids / protective styling',price:40,duration:150,description:'Protective styling; final price may vary by length.'},
+{id:'hair-treatment',category:'Hair',name:'Deep conditioning treatment',price:25,duration:60,description:'A nourishing wash-day treatment.'},
+{id:'hair-colour',category:'Hair',name:'Colour consultation & application',price:50,duration:150,description:'Colour service; consultation required in a real salon.'},
+{id:'hair-updo',category:'Hair',name:'Occasion styling / updo',price:35,duration:75,description:'A styled finish for your special occasion.'},
+{id:'barber-cut',category:'Barber',name:'Classic haircut',price:15,duration:35,description:'A tailored cut and clean finish.'},
+{id:'barber-fade',category:'Barber',name:'Fade / taper',price:20,duration:45,description:'Blended detail and a precise outline.'},
+{id:'barber-beard',category:'Barber',name:'Beard trim & shape',price:10,duration:25,description:'Shape, tidy and define.'},
+{id:'barber-combo',category:'Barber',name:'Haircut & beard combo',price:25,duration:60,description:'A complete grooming refresh.'},
+{id:'barber-shave',category:'Barber',name:'Hot towel shave',price:15,duration:35,description:'A traditional-inspired shave experience.'},
+{id:'spa-swedish',category:'Spa',name:'Relaxation massage',price:40,duration:60,description:'A calming full-body massage experience.'},
+{id:'spa-deep',category:'Spa',name:'Deep tissue massage',price:50,duration:75,description:'Focused massage pressure; discuss comfort first.'},
+{id:'spa-back',category:'Spa',name:'Back, neck & shoulder massage',price:25,duration:35,description:'A focused upper-body reset.'},
+{id:'spa-hotstone',category:'Spa',name:'Hot stone ritual',price:55,duration:75,description:'A warm, relaxing massage-style ritual.'},
+{id:'spa-express',category:'Spa',name:'Express refresh facial',price:20,duration:30,description:'A quick cleanse, refresh and moisturise.'},
+{id:'spa-classic',category:'Spa',name:'Classic cleansing facial',price:35,duration:55,description:'Cleanse, gentle exfoliation and hydration.'},
+{id:'spa-hydrate',category:'Spa',name:'Hydrating facial',price:40,duration:60,description:'A comfort-focused hydration ritual.'},
+{id:'spa-glow',category:'Spa',name:'Glow facial',price:45,duration:60,description:'A brightening-inspired facial experience.'},
+{id:'spa-scrub',category:'Spa',name:'Body scrub & exfoliation',price:35,duration:45,description:'A refreshing body exfoliation treatment.'},
+{id:'spa-wrap',category:'Spa',name:'Body wrap & hydration',price:45,duration:60,description:'A nourishing body-care ritual.'},
+{id:'spa-scalp',category:'Spa',name:'Scalp massage',price:15,duration:20,description:'A soothing add-on for your visit.'},
+{id:'spa-foot',category:'Spa',name:'Foot soak & refresh',price:15,duration:25,description:'A relaxing foot-care ritual.'}
+];
+const providerPool = {
+Nails:['Amara N.','Wanjiku M.','Faith K.'],
+Hair:['Nia W.','Miriam A.','Joyce T.'],
+Barber:['Kevin M.','Brian K.'],
+Spa:['Asha W.','Lydia N.','Maya K.']
+};
+const categoryList=['All','Nails','Hair','Barber','Spa'];
+let activeCategory='All';
+let cart=[];
+const byId=id=>document.getElementById(id);
+const money=value=>'KSh '+Number(value).toLocaleString('en-KE');
+const durationLabel=mins=>mins>=60?(Math.floor(mins/60)+' hr'+(mins%60?' '+mins%60+' min':'')):mins+' min';
+const tabs=byId('category-tabs'),catalog=byId('service-catalog'),cartLines=byId('cart-lines'),dateInput=byId('booking-date'),timeSelect=byId('booking-time');
+const today=new Date();today.setMinutes(today.getMinutes()-today.getTimezoneOffset());dateInput.min=today.toISOString().slice(0,10);dateInput.value=dateInput.min;
+function renderTabs(){tabs.innerHTML=categoryList.map(c=>'<button type="button" class="category-tab" role="tab" aria-selected="'+(activeCategory===c)+'" data-category="'+c+'">'+(c==='All'?'All services':c==='Spa'?'Spa & wellness':c)+'</button>').join('');tabs.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{activeCategory=b.dataset.category;renderTabs();renderCatalog()}))}
+function renderCatalog(){const visible=serviceMenu.filter(s=>activeCategory==='All'||s.category===activeCategory);catalog.innerHTML=visible.map(s=>'<article class="menu-service"><div class="menu-service-art" data-category="'+s.category+'" aria-hidden="true"></div><div class="menu-service-content"><div class="menu-service-top"><h3>'+s.name+'</h3><span class="service-duration">'+durationLabel(s.duration)+'</span></div><p>'+s.description+'</p><div class="menu-service-bottom"><strong class="menu-price">'+money(s.price)+'</strong><button class="add-service" type="button" data-add="'+s.id+'">＋ Add to booking</button></div></div></article>').join('');catalog.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>addService(b.dataset.add)))}
+function addService(id){const s=serviceMenu.find(x=>x.id===id);if(!s)return;cart.push({...s,key:crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()),provider:providerPool[s.category][0]});renderCart()}
+function removeService(key){cart=cart.filter(x=>x.key!==key);renderCart()}
+function renderCart(){byId('cart-count').textContent=cart.length+' service'+(cart.length===1?'':'s');const total=cart.reduce((n,s)=>n+s.price,0);byId('cart-total').textContent=money(total);byId('summary-total').textContent=money(total);byId('checkout-button').disabled=!cart.length;
+if(!cart.length){cartLines.innerHTML='<div class="empty-cart">Your booking is empty. Add a service above to get started.</div>';byId('summary-services').innerHTML='<p>No services selected yet.</p>'}
+else{cartLines.innerHTML=cart.map(s=>'<div class="cart-line"><div class="cart-line-main"><div class="cart-line-title">'+s.name+'</div><div class="cart-line-meta">'+s.category+' · '+durationLabel(s.duration)+'</div><div class="cart-line-controls"><select aria-label="Provider for '+s.name+'" data-provider="'+s.key+'">'+providerPool[s.category].map(p=>'<option '+(p===s.provider?'selected':'')+'>'+p+'</option>').join('')+'</select><button type="button" class="remove-service" data-remove="'+s.key+'">Remove</button></div></div><strong class="cart-line-price">'+money(s.price)+'</strong></div>').join('');
+byId('summary-services').innerHTML=cart.map(s=>'<div class="summary-service"><span>'+s.name+'</span><span>'+money(s.price)+'</span></div>').join('')}
+cartLines.querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>removeService(b.dataset.remove)));
+cartLines.querySelectorAll('[data-provider]').forEach(sel=>sel.addEventListener('change',()=>{const s=cart.find(x=>x.key===sel.dataset.provider);if(s){s.provider=sel.value;refreshAvailability()}}));
+refreshAvailability()}
+function parseTime(value){const [h,m]=value.split(':').map(Number);return h*60+m}
+function timeText(min){return String(Math.floor(min/60)).padStart(2,'0')+':'+String(min%60).padStart(2,'0')}
+function providerBlocks(provider,date){const day=new Date(date+'T12:00:00').getDay();const seed=provider.split('').reduce((a,c)=>a+c.charCodeAt(0),0)+Number(date.replaceAll('-',''));const blocks=[];if(day===0)return [{start:0,end:1440}];if(seed%3===0)blocks.push({start:720,end:780});if(seed%4===0)blocks.push({start:900,end:960});return blocks}
+function scheduleAt(start){let cursor=start;const items=[];for(const s of cart){const end=cursor+s.duration;const blocks=providerBlocks(s.provider,dateInput.value);if(end>1080||blocks.some(b=>cursor<b.end&&end>b.start))return null;items.push({...s,start:cursor,end});cursor=end+10}return items}
+function refreshAvailability(){if(!cart.length){timeSelect.innerHTML='<option value="">Add services first</option>';timeSelect.disabled=true;byId('availability-message').textContent='Add services to see available appointment times.';byId('availability-message').className='availability-message';byId('appointment-timeline').innerHTML='';return}
+const previous=timeSelect.value;const options=[];for(let t=540;t<=960;t+=30){if(scheduleAt(t))options.push(t)}
+timeSelect.disabled=!options.length;timeSelect.innerHTML=options.length?options.map(t=>'<option value="'+timeText(t)+'">'+timeText(t)+'</option>').join(''):'<option value="">No matching times</option>';
+if(options.includes(parseTime(previous)))timeSelect.value=previous;else if(options.length)timeSelect.value=timeText(options[0]);
+byId('availability-message').textContent=options.length?options.length+' sample start times available for this combination. Times are simulated, not live.':'No sample start time fits all selected providers and service durations. Try another date or provider.';byId('availability-message').className='availability-message '+(options.length?'good':'warn');renderTimeline()}
+function renderTimeline(){const start=timeSelect.value?parseTime(timeSelect.value):null;const plan=start===null?null:scheduleAt(start);byId('appointment-timeline').innerHTML=plan?plan.map(s=>'<div class="timeline-item"><strong class="timeline-time">'+timeText(s.start)+'–'+timeText(s.end)+'</strong><span class="timeline-name">'+s.name+'</span><span class="timeline-provider">'+s.provider+'</span></div>').join(''):'';
+}
+tabs.addEventListener('click',()=>{});dateInput.addEventListener('change',refreshAvailability);timeSelect.addEventListener('change',renderTimeline);
+byId('checkout-button').addEventListener('click',()=>{const name=byId('customer-name').value.trim(),phone=byId('customer-phone').value.trim();if(!name||!phone){alert('Please enter your name and phone number to continue.');(!name?byId('customer-name'):byId('customer-phone')).focus();return}if(!cart.length||!timeSelect.value){alert('Please add services and choose an available appointment time.');return}
+const payment=document.querySelector('input[name="payment"]:checked').value;const plan=scheduleAt(parseTime(timeSelect.value));if(!plan){alert('That appointment time is no longer available in this demo. Please choose another.');refreshAvailability();return}
+const ref='EL-'+Math.random().toString(36).slice(2,8).toUpperCase();byId('confirmation-copy').textContent='Thank you, '+name+'. Your sample appointment plan is ready for '+new Date(dateInput.value+'T12:00:00').toLocaleDateString('en-KE',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'. Reference: '+ref+'.';
+byId('confirmation-details').innerHTML='<strong>'+timeSelect.value+' start · '+money(cart.reduce((n,s)=>n+s.price,0))+'</strong><br>'+plan.map(s=>timeText(s.start)+' '+s.name+' with '+s.provider).join('<br>')+'<br><br>Payment: '+(payment==='advance'?'Advance payment selected — simulated only, no charge made.':'Pay at salon selected.');
+byId('confirmation-panel').hidden=false;byId('confirmation-panel').scrollIntoView({behavior:'smooth',block:'center'});});
+byId('new-booking').addEventListener('click',()=>{cart=[];renderCart();byId('confirmation-panel').hidden=true;byId('customer-name').value='';byId('customer-phone').value='';byId('customer-notes').value='';byId('your-booking').scrollIntoView({behavior:'smooth'})});
+renderTabs();renderCatalog();renderCart();
+const requested=new URLSearchParams(location.search).get('category');if(requested==='spa'){activeCategory='Spa';renderTabs();renderCatalog()}
