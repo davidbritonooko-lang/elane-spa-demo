@@ -46,3 +46,7 @@ body{padding-top:calc(var(--header-height) + var(--announcement-height))}
 .image-unavailable{position:relative!important;isolation:isolate;background:radial-gradient(ellipse at 75% 20%,#bd9a6240,transparent 38%),linear-gradient(135deg,#352433,#765b68)!important;min-height:180px}
 .image-unavailable:before{content:"ÉLANE";position:absolute;inset:0;display:grid;place-items:center;color:#dfc99f99;font:clamp(1.8rem,5vw,3.4rem) var(--serif);letter-spacing:.22em;z-index:1}
 .image-unavailable:after{content:"";position:absolute;width:190px;height:190px;border:1px solid #dfc99f45;border-radius:50%;right:-55px;top:-85px;z-index:-1}
+
+.home-service-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1000px){.home-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.home-service-grid{grid-template-columns:1fr}}
