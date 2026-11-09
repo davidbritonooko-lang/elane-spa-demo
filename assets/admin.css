@@ -144,3 +144,16 @@
 @media(prefers-reduced-motion:reduce){
  .admin-stat,.admin-quick-panel>button,.admin-record-actions button{transition:none}
 }
+
+
+/* Keep the admin header anchored to the viewport while dashboard content scrolls. */
+.admin-main{padding-top:88px}
+.admin-topbar{position:fixed;top:0;left:270px;right:0;width:auto;z-index:40}
+@media(max-width:1050px){
+  .admin-main{padding-top:88px}
+  .admin-topbar{left:245px}
+}
+@media(max-width:720px){
+  .admin-main{padding-top:74px}
+  .admin-topbar{left:0;right:0;height:74px}
+}
