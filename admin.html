@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#17151a">
+<meta name="description" content="ÉLANE administration demo."><title>Admin Studio | ÉLANE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/site.css"><link rel="stylesheet" href="assets/admin.css">
+</head>
+<body class="admin-body">
+<div class="admin-frame">
+<aside class="admin-sidebar" id="admin-sidebar">
+<a class="admin-brand" href="index.html">ÉLANE<small>ADMIN STUDIO</small></a>
+<div class="admin-profile"><span class="admin-avatar">E</span><span><strong>Salon administrator</strong><small>Demo workspace</small></span></div>
+<nav class="admin-nav" aria-label="Admin navigation">
+<span class="admin-nav-label">WORKSPACE</span>
+<button class="admin-nav-link active" data-view="overview"><span>◫</span>Overview</button>
+<button class="admin-nav-link" data-view="bookings"><span>▦</span>Bookings <i id="pending-nav-count">0</i></button>
+<button class="admin-nav-link" data-view="services"><span>✦</span>Services</button>
+<button class="admin-nav-link" data-view="staff"><span>♙</span>Staff & providers</button>
+<span class="admin-nav-label">WEBSITE</span>
+<button class="admin-nav-link" data-view="content"><span>▤</span>Content & settings</button>
+</nav>
+<div class="admin-sidebar-bottom"><span class="demo-status"><i></i> Demo mode active</span><a href="index.html">← View public website</a></div>
+</aside>
+<main class="admin-main">
+<header class="admin-topbar"><button class="admin-mobile-toggle" id="admin-mobile-toggle" aria-label="Open admin menu">☰</button><div><span class="admin-breadcrumb">ÉLANE / ADMIN</span><strong id="page-title">Overview</strong></div><div class="admin-top-actions"><span class="admin-date" id="today-label"></span><a class="admin-view-site" href="index.html">View website ↗</a></div></header>
+<div class="admin-content">
+<div class="admin-demo-banner"><span>DEMO ENVIRONMENT</span><p>Changes are saved in this browser only. No real bookings, payments or customer messages are processed.</p><button id="reset-demo" type="button">Reset demo data</button></div>
+<section class="admin-view active" id="view-overview">
+<div class="admin-heading"><div><span class="eyebrow">YOUR SALON AT A GLANCE</span><h1 class="serif">Good day. Welcome back.</h1><p>Here is what is happening across your ÉLANE demo workspace.</p></div><button class="admin-primary" data-go="services">Manage services <span>↗</span></button></div>
+<div class="admin-stat-grid">
+<article class="admin-stat"><span>Total bookings</span><strong id="stat-bookings">0</strong><small>All demo appointments</small><i>▦</i></article>
+<article class="admin-stat"><span>Awaiting confirmation</span><strong id="stat-pending">0</strong><small>Need an admin review</small><i>◷</i></article>
+<article class="admin-stat"><span>Active services</span><strong id="stat-services">0</strong><small>Across four studios</small><i>✦</i></article>
+<article class="admin-stat"><span>Active providers</span><strong id="stat-staff">0</strong><small>Available demo profiles</small><i>♙</i></article>
+</div>
+<div class="admin-overview-grid"><article class="admin-panel"><div class="admin-panel-head"><div><span class="eyebrow">LATEST ACTIVITY</span><h2>Recent bookings</h2></div><button class="admin-text-button" data-go="bookings">View all →</button></div><div id="recent-bookings" class="admin-table-wrap"></div></article>
+<article class="admin-panel admin-quick-panel"><span class="eyebrow">QUICK ACCESS</span><h2>Make a change.</h2><button data-go="services"><span>✦</span><span><strong>Update service menu</strong><small>Prices, durations and descriptions</small></span>→</button><button data-go="staff"><span>♙</span><span><strong>Manage your team</strong><small>Providers and specialties</small></span>→</button><button data-go="content"><span>▤</span><span><strong>Edit website details</strong><small>Homepage and contact information</small></span>→</button></article></div>
+<div class="admin-note"><strong>About this demo</strong><p>The dashboard uses browser localStorage. It is useful for demonstrating workflows, but it is not a secure admin system and does not synchronize between browsers or devices.</p></div>
+</section>
+<section class="admin-view" id="view-bookings">
+<div class="admin-heading"><div><span class="eyebrow">APPOINTMENT MANAGEMENT</span><h1 class="serif">Bookings</h1><p>Review sample appointments created through the public booking page.</p></div><div class="admin-heading-actions"><input id="booking-search" class="admin-search" type="search" placeholder="Search name or reference" aria-label="Search bookings"><select id="booking-filter" class="admin-select" aria-label="Filter bookings"><option value="all">All statuses</option><option value="Pending">Pending</option><option value="Confirmed">Confirmed</option><option value="Cancelled">Cancelled</option></select></div></div>
+<article class="admin-panel"><div class="admin-panel-head"><div><span class="eyebrow">BOOKING REGISTER</span><h2>All appointments <small id="booking-count"></small></h2></div><span class="admin-inline-note">Sample data</span></div><div id="bookings-table" class="admin-table-wrap"></div></article>
+</section>
+<section class="admin-view" id="view-services">
+<div class="admin-heading"><div><span class="eyebrow">MENU MANAGEMENT</span><h1 class="serif">Services</h1><p>Maintain the menu used by the public booking builder.</p></div><button class="admin-primary" id="add-service">＋ Add a service</button></div>
+<div class="admin-filter-row"><div class="admin-category-filters" id="service-filters"><button class="selected" data-category="All">All services</button><button data-category="Nails">Nails</button><button data-category="Hair">Hair</button><button data-category="Barber">Barber</button><button data-category="Spa">Spa</button></div><span class="admin-inline-note">Prices shown in KSh</span></div>
+<article class="admin-panel"><div id="services-list" class="admin-record-list"></div></article>
+</section>
+<section class="admin-view" id="view-staff">
+<div class="admin-heading"><div><span class="eyebrow">TEAM MANAGEMENT</span><h1 class="serif">Staff & providers</h1><p>Manage demo providers and the service categories they support.</p></div><button class="admin-primary" id="add-staff">＋ Add a provider</button></div>
+<div class="admin-stat-grid staff-summary"><article class="admin-stat"><span>All providers</span><strong id="staff-total">0</strong><small>Saved team profiles</small></article><article class="admin-stat"><span>Active providers</span><strong id="staff-active">0</strong><small>Available in booking demo</small></article></div>
+<article class="admin-panel"><div id="staff-list" class="admin-record-list"></div></article>
+</section>
+<section class="admin-view" id="view-content">
+<div class="admin-heading"><div><span class="eyebrow">PUBLIC WEBSITE</span><h1 class="serif">Content & settings</h1><p>Update the shared announcement, homepage copy and salon contact details.</p></div><span class="admin-saved-label" id="settings-saved">LOCAL DEMO CONTENT</span></div>
+<form id="settings-form" class="admin-panel admin-settings-form">
+<div class="admin-form-section"><span class="eyebrow">HOMEPAGE</span><h2>First impressions</h2><label>Announcement bar<input name="announcement" maxlength="140" required></label><label>Hero headline<input name="homeHeadline" maxlength="100" required></label><label>Hero introduction<textarea name="homeIntro" rows="3" maxlength="280" required></textarea></label></div>
+<div class="admin-form-section"><span class="eyebrow">SALON DETAILS</span><h2>Where clients can find you</h2><div class="admin-form-grid"><label>Address / location<input name="address" maxlength="120" required></label><label>Phone / WhatsApp<input name="phone" maxlength="40" required></label><label class="wide">Opening hours<input name="hours" maxlength="100" required></label></div></div>
+<div class="admin-form-actions"><p>These edits appear on pages that use the shared ÉLANE content settings.</p><button class="admin-primary" type="submit">Save website settings</button></div>
+</form>
+</section>
+</div>
+</main>
+</div>
+<div class="admin-modal-backdrop" id="admin-modal" hidden><section class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="admin-modal-head"><div><span class="eyebrow">ÉLANE MANAGEMENT</span><h2 id="modal-title">Add service</h2></div><button id="modal-close" class="admin-icon-button" aria-label="Close dialog">×</button></div><form id="record-form"><div id="record-fields" class="admin-form-grid"></div><label class="admin-checkbox"><input type="checkbox" name="active" checked> Active and visible in the public booking menu</label><div class="admin-form-actions"><button type="button" class="admin-secondary" id="modal-cancel">Cancel</button><button type="submit" class="admin-primary">Save changes</button></div></form></section></div>
+<div class="admin-toast" id="admin-toast" role="status" aria-live="polite"></div>
+<script src="assets/store.js"></script><script src="assets/admin.js" defer></script>
+</body></html>
