@@ -78,5 +78,6 @@
     saveSettings(settings){data.settings={...data.settings,...settings};return persist()},
     resetDemo(){data=clone(defaults);return persist()}
   };
+  window.addEventListener('storage',event=>{if(event.key===KEY){data=read();window.dispatchEvent(new CustomEvent('elane:datachange',{detail:{key:KEY}}));}});
   window.ElaneStore=api;
 })();
