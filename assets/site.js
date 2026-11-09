@@ -22,7 +22,11 @@ else{
   }),{threshold:.12,rootMargin:'0px 0px -30px 0px'});
   revealItems.forEach(el=>observer.observe(el));
 }
-document.querySelectorAll('img').forEach((img,index)=>{
+document.querySelectorAll('img').forEach(img=>{
   img.decoding='async';
-  if(index>0&&!img.hasAttribute('loading'))img.loading='lazy';
+  if(!img.hasAttribute('loading')&&img.closest('.hero-image')===null)img.loading='lazy';
+  img.addEventListener('error',()=>{
+    const frame=img.closest('.image,.photo-frame,.hero-image,.gallery');
+    if(frame){frame.classList.add('image-unavailable');img.remove()}
+  },{once:true});
 });
